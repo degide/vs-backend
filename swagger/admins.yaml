@@ -1,0 +1,208 @@
+paths:
+  /admins:
+    post:
+      tags:
+        - Admins
+      description: Create a new admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewAdmin"
+      responses:
+        201:
+          description: Admin created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  admin:
+                    $ref: "#/components/schemas/Admin"
+        400:
+          description: "Bad request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+        500:
+          description: "Internal server error request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+    get:
+      tags:
+        - Admins
+      security:
+        - bearerAuth: []
+      description: Get all admins
+      parameters:
+        - name: page
+          in: query
+          type: number
+          description: The page to get
+        - name: perPage
+          in: query
+          type: number
+          description: The number of documents per page
+      responses:
+        200:
+          description: All admins
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+        401:
+          description: "Unauthorized request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+  /admins/login:
+    post:
+      tags:
+        - Admins
+      description: "Admin login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLogin"
+      responses:
+        200:
+          description: Admin logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  token:
+                    type: string
+        400:
+          description: "Bad request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+  /admins/{adminId}:
+    get:
+      tags:
+        - Admins
+      security:
+        - bearerAuth: []
+      description: "Admin login"
+      parameters:
+        - name: adminId
+          type: string
+          in: path
+          required: true
+      responses:
+        200:
+          description: Admin found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  admin:
+                    $ref: "#/components/schemas/Admin"
+        400:
+          description: "Bad request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+        401:
+          description: "Unauthorized request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"    
+        404:
+          description: "Admin not found response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+components:
+  responses:
+    ErrorResponse:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: number
+            success:
+              type: boolean
+            message:
+              type: string
+
+  schemas:
+    Admin:
+      type: object
+      properties:
+        _id:
+          type: string
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        national_id:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    NewAdmin:
+      type: object
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        national_id:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - firstName
+        - lastName
+        - phone
+        - national_id
+        - email
+        - password
+    AdminLogin:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password

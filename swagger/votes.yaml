@@ -1,0 +1,77 @@
+paths:
+  /votes:
+    post:
+      tags:
+        - Votes
+      security:
+        - bearerAuth: []
+      description: Make a new vote
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewVote"
+      responses:
+        201:
+          description: Voted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  vote:
+                    $ref: "#/components/schemas/Vote"
+        400:
+          description: "Bad request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+        500:
+          description: "Internal server error request response"
+          content:
+            $ref: "#/components/responses/ErrorResponse"
+components:
+  responses:
+    ErrorResponse:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: number
+            success:
+              type: boolean
+            message:
+              type: string
+  schemas:
+    Vote:
+      type: object
+      properties:
+        _id:
+          type: string
+        voter:
+          type: string
+          description: Voter id
+        candidate:
+          type: string
+          description: Candidate id
+        createdAt:
+          type: string
+          description: date created
+        updatedAt:
+          type: string
+          description: date updated
+    NewVote:
+      type: object
+      properties:
+        voter:
+          type: string
+          description: Voter id
+        candidate:
+          type: string
+          description: Candidate id
